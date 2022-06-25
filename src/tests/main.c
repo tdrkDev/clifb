@@ -295,21 +295,8 @@ int main(int argc, char **argv) {
     nc_mono_doubled_fb_refresh();
     usleep(1000 * 10000);
 
-    for (int i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
-        struct clifb_test item = tests[i];
-
-        refresh_fb((void *)fb);
-
-        char *test_name = malloc(strlen(item.name) + 30);
-        sprintf(test_name, "Running test #%d: %s", i + 1, item.name);
-        nc_mono_doubled_fb_mvaddstr(0, 0, test_name);
-        nc_mono_doubled_fb_refresh();
-        free(test_name);
-        
-        usleep(1000 * 1000); // 1s
-        item.func(fb);
-        usleep(1000 * item.delay);
-    }
+    for (int i = 0; i < sizeof(tests) / sizeof(tests[0]); i++)
+        run_test(fb, i);
 
     destroy_fb(fb);
 
